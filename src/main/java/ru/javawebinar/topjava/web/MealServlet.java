@@ -24,15 +24,15 @@ public class MealServlet extends HttpServlet {
     private static final LocalTime startTime = LocalTime.of(1, 0);
     private static final LocalTime endTime = LocalTime.of(23, 0);
     private final List<MealTo> listMealTo = new ArrayList<>();
+    File jsonFile = new File(getClass().getClassLoader().getResource("meals.json").getFile());
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
-        File jsonFile = new File("C:\\projects\\topjava\\src\\main\\resources\\meals.json");
         JsonFileProcessorGson processor = new JsonFileProcessorGson(jsonFile);
         List<Meal> meals = processor.getMeals();
         List<MealTo> listMealTo = filteredByStreams(meals, startTime, endTime, caloriesPerDay);
-
         request.setAttribute("listMealTo", listMealTo);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
